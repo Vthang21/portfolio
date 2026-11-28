@@ -358,6 +358,106 @@ footer{color:var(--mute);font-size:13px;text-align:center;padding:26px 0 40px}
         requestAnimationFrame(loop);
       })();
       </script>
+      <figure class="full-anim" style="margin:12px 0 0">
+        <svg id="fullSvg" viewBox="0 0 640 360" role="img" aria-label="Animated illustration of the full pipeline on a bending road: step 1 shades the road green, step 2 boxes the water, step 3 keeps the water that is on the road and ignores the puddle beside it, step 4 reads the distance from LiDAR points just below the water while the flood gets closer." style="width:100%;height:auto;display:block;border-radius:10px;background:#0f1722">
+          <defs>
+            <linearGradient id="fpSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b3f5c"/><stop offset="1" stop-color="#6d87a6"/></linearGradient>
+            <linearGradient id="fpGround" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d5a35"/><stop offset="1" stop-color="#22351f"/></linearGradient>
+            <linearGradient id="fpWater" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fc3e4"/><stop offset="1" stop-color="#4f7fae"/></linearGradient>
+          </defs>
+          <rect width="640" height="140" fill="url(#fpSky)"/>
+          <rect y="140" width="640" height="220" fill="url(#fpGround)"/>
+          <g fill="#1d2c1a" opacity=".9"><path d="M0 140 Q60 105 120 140 Q170 115 220 140Z"/><path d="M420 140 Q480 110 540 140 Q590 120 640 140Z"/></g>
+          <path id="fpRoad" fill="#55585e"/>
+          <path id="fpLane" fill="none" stroke="#e9e3c9" stroke-width="3" stroke-dasharray="12 16" opacity=".6"/>
+          <ellipse id="fpSide" fill="url(#fpWater)"/>
+          <ellipse id="fpFlood" fill="url(#fpWater)"/>
+          <path id="fpMask" fill="#2ecc71" fill-rule="evenodd" opacity="0"/>
+          <g id="fpDots"></g>
+          <circle id="fpRing" fill="none" stroke="#e0954f" stroke-width="2.5" opacity="0"/>
+          <g id="fpSideG" opacity="0">
+            <rect id="fpSideBox" fill="none" stroke="#f5c542" stroke-width="2" stroke-dasharray="6 4"/>
+            <text id="fpSideTxt" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="#f5c542" text-anchor="middle">flood 0.64 · off road</text>
+          </g>
+          <g id="fpBoxG" opacity="0">
+            <rect id="fpBox" fill="none" stroke="#ff4d4f" stroke-width="3"/>
+            <rect id="fpTag" height="22" fill="#ff4d4f"/>
+            <text id="fpTxt" font-family="Inter,sans-serif" font-size="13" font-weight="600" fill="#fff">flood</text>
+          </g>
+          <g id="fpSteps" font-family="Inter,sans-serif" font-size="12" font-weight="600"></g>
+        </svg>
+        <figcaption class="cap">The whole pipeline together (illustration, not real footage): 1 find the road, 2 YOLOv8 puts a box and confidence on any water, 3 keep only water on the road, 4 read the distance from LiDAR points on the road just below it, updated every frame as the car gets closer.</figcaption>
+      </figure>
+      <script>
+      (function(){
+        var svg=document.getElementById('fullSvg'); if(!svg) return;
+        var NS='http://www.w3.org/2000/svg', $=function(id){return document.getElementById(id)};
+        var road=$('fpRoad'),lane=$('fpLane'),mask=$('fpMask'),fl=$('fpFlood'),side=$('fpSide'),dotsG=$('fpDots'),ring=$('fpRing'),
+            sideG=$('fpSideG'),sideBox=$('fpSideBox'),sideTxt=$('fpSideTxt'),boxG=$('fpBoxG'),box=$('fpBox'),tag=$('fpTag'),txt=$('fpTxt'),stepsG=$('fpSteps');
+        var H=140,B=360,N=60;
+        var names=['1 Road','2 YOLOv8 detect','3 On road?','4 Distance'], cols=['#2ecc71','#ff4d4f','#f5c542','#e0954f'], chips=[];
+        names.forEach(function(n,i){ var x=14+i*154, r=document.createElementNS(NS,'rect'), t=document.createElementNS(NS,'text');
+          r.setAttribute('x',x);r.setAttribute('y',12);r.setAttribute('width',146);r.setAttribute('height',26);r.setAttribute('rx',13);
+          t.setAttribute('x',x+73);t.setAttribute('y',29);t.setAttribute('text-anchor','middle');t.textContent=n;
+          stepsG.appendChild(r);stepsG.appendChild(t);chips.push([r,t,cols[i]]); });
+        // LiDAR scan rows (indices into road rows)
+        var scan=[]; for(var s=0;s<15;s++){ var row=Math.round(N*Math.pow((s+1)/15,0.85)), pts=[], g=row/N, n=Math.round(8+26*g);
+          for(var k=0;k<n;k++){ var c=document.createElementNS(NS,'circle'); dotsG.appendChild(c); pts.push([c,(k+.5)/n]); } scan.push([row,pts]); }
+        function geom(bend){ var C=[]; for(var i=0;i<=N;i++){ var f=i/N, y=H+(B-H)*Math.pow(f,1.35), g=(y-H)/(B-H);
+            C.push([320+bend*Math.pow(1-g,2)*230, y, 6+250*g, g]); } return C; }
+        function poly(C){ var L=C.map(function(c){return (c[0]-c[2]).toFixed(1)+' '+c[1].toFixed(1)}),
+            R=C.slice().reverse().map(function(c){return (c[0]+c[2]).toFixed(1)+' '+c[1].toFixed(1)}); return 'M'+L.concat(R).join('L')+'Z'; }
+        function ell(cx,cy,rx,ry){ return ' M'+(cx-rx).toFixed(1)+' '+cy.toFixed(1)+' a'+rx.toFixed(1)+' '+ry.toFixed(1)+' 0 1 0 '+(2*rx).toFixed(1)+' 0 a'+rx.toFixed(1)+' '+ry.toFixed(1)+' 0 1 0 '+(-2*rx).toFixed(1)+' 0Z'; }
+        function clamp(v){return Math.max(0,Math.min(1,v))}
+        function at(C,pos){ var i=Math.min(N-1,Math.floor(pos)), a=pos-i, p=C[i], q=C[i+1];
+          return [p[0]+(q[0]-p[0])*a, p[1]+(q[1]-p[1])*a, p[2]+(q[2]-p[2])*a, p[3]+(q[3]-p[3])*a]; }
+        function draw(c,t){
+          var s1=clamp(c/.08), s2=clamp((c-.12)/.06), s3=clamp((c-.22)/.06), s4=clamp((c-.32)/.06);
+          var bend=Math.sin(t*.3)*.55, C=geom(bend);
+          road.setAttribute('d',poly(C));
+          lane.setAttribute('d','M'+C.map(function(k){return k[0].toFixed(1)+' '+k[1].toFixed(1)}).join('L'));
+          lane.setAttribute('stroke-dashoffset',(-t*70).toFixed(1));
+          // flood approaches after the steps are shown
+          var m=clamp((c-.38)/.52), e=m*m, pos=18+(N-14-18)*e, F=at(C,pos);
+          var fx=F[0]+F[2]*.1, fy=F[1], frx=F[2]*.5, fry=3+20*F[3];
+          fl.setAttribute('cx',fx.toFixed(1));fl.setAttribute('cy',fy.toFixed(1));fl.setAttribute('rx',frx.toFixed(1));fl.setAttribute('ry',fry.toFixed(1));
+          // puddle beside the road
+          var P=at(C,34), sx=P[0]+P[2]+40+P[2]*.25, srx=18+30*P[3], sry=3+8*P[3];
+          side.setAttribute('cx',sx.toFixed(1));side.setAttribute('cy',P[1].toFixed(1));side.setAttribute('rx',srx.toFixed(1));side.setAttribute('ry',sry.toFixed(1));
+          // step 1 road mask (water cut out once the model has it)
+          mask.setAttribute('d',poly(C)+ell(fx,fy,frx,fry)); mask.setAttribute('opacity',(.45*s1).toFixed(2));
+          // step 2 boxes on all water
+          var bx=fx-frx-6, by=fy-fry-5, bw=2*frx+12, bh=2*fry+10;
+          box.setAttribute('x',bx);box.setAttribute('y',by);box.setAttribute('width',bw);box.setAttribute('height',bh);
+          tag.setAttribute('x',bx-1.5);tag.setAttribute('y',by-22);
+          txt.setAttribute('x',bx+6);txt.setAttribute('y',by-6);
+          boxG.setAttribute('opacity',s2.toFixed(2));
+          sideBox.setAttribute('x',(sx-srx-6).toFixed(1));sideBox.setAttribute('y',(P[1]-sry-5).toFixed(1));sideBox.setAttribute('width',(2*srx+12).toFixed(1));sideBox.setAttribute('height',(2*sry+10).toFixed(1));
+          sideBox.setAttribute('stroke',s3>0?'#f5c542':'#ff4d4f'); sideBox.setAttribute('stroke-dasharray',s3>0?'6 4':'0');
+          var tw=sideTxt.getComputedTextLength?sideTxt.getComputedTextLength():120; sideTxt.setAttribute('x',Math.min(sx,634-tw/2).toFixed(1));sideTxt.setAttribute('y',(P[1]-sry-10).toFixed(1));sideTxt.setAttribute('opacity',s3.toFixed(2)); sideTxt.textContent=s3>0?'flood 0.64 · off road, ignored':'flood 0.64';
+          sideG.setAttribute('opacity',s2.toFixed(2));
+          // step 4 LiDAR + distance
+          var d=45-37*e, rcy=by+bh+5+14*F[3], rr=5+18*F[3];
+          var conf=(0.78+0.17*e).toFixed(2); txt.textContent='flood '+conf+(s4>0?('  ·  '+d.toFixed(1)+' m'):'');
+          ring.setAttribute('cx',fx.toFixed(1));ring.setAttribute('cy',rcy.toFixed(1));ring.setAttribute('r',rr.toFixed(1));ring.setAttribute('opacity',s4.toFixed(2));
+          for(var s=0;s<scan.length;s++){ var R=C[scan[s][0]], pts=scan[s][1];
+            for(var k=0;k<pts.length;k++){ var dot=pts[k][0], x=R[0]-R[2]+2*R[2]*pts[k][1], y=R[1];
+              var dx=(x-fx)/(frx+3), dy=(y-fy)/(fry+3), wet=dx*dx+dy*dy<1, inR=Math.hypot(x-fx,y-rcy)<rr;
+              dot.setAttribute('cx',x.toFixed(1));dot.setAttribute('cy',y.toFixed(1));dot.setAttribute('r',(1+1.6*R[3]).toFixed(2));
+              dot.setAttribute('fill',inR?'#e0954f':'#e8edf4'); dot.setAttribute('opacity',(wet?0:(inR?1:.5))*s4); } }
+          tag.setAttribute('width',(txt.getComputedTextLength?txt.getComputedTextLength()+12:bw).toFixed(1));
+          // step chips
+          [s1,s2,s3,s4].forEach(function(v,i){ var ch=chips[i];
+            ch[0].setAttribute('fill',v>0?ch[2]:'#0c1118'); ch[0].setAttribute('opacity',v>0?.9:.6);
+            ch[1].setAttribute('fill',v>0?'#0c1118':'#9aa7b8'); });
+        }
+        var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if(reduce){ draw(.7,1); return; }
+        var T=13000,t0=null;
+        function loop(now){ if(t0===null)t0=now; var ms=now-t0; draw((ms%T)/T,ms/1000); requestAnimationFrame(loop); }
+        requestAnimationFrame(loop);
+      })();
+      </script>
     </div>
     <div>
       <div class="kicker">HONOURS PROJECT · QUT EGH490 · 2026 · SUPERVISOR: DR CONNOR MALONE</div>

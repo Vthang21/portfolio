@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Vangboei Laithang — Electrical Engineering (Honours) graduate from QUT, with work across perception, power electronics, cloud and embedded systems.">
+<title>Vangboei Laithang</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE: calm, capable, a graduate engineer's datasheet
+   IDEA: the page behaves like a clean schematic sheet with a title block
+   PICTURE: full-width banner of copper circuit traces feeding a live scope trace
+   COLOUR and TYPE: white sheet, deep ink, electric blue accent, copper traces; Barlow + Inter
+   LAYOUT: banner + profile card, then stacked cards: about, experience, education, stack, highlights, project grid, contact */
+:root{color-scheme:light dark;
+  --bg:light-dark(#f3f5f8,#0c1118);--card:light-dark(#ffffff,#141b25);--ink:light-dark(#111a26,#e8edf4);
+  --mute:light-dark(#566375,#9aa7b8);--line:light-dark(#e1e6ee,#243042);--blue:light-dark(#1f5eff,#6f9bff);
+  --blue-soft:light-dark(#eaf0ff,#1a2640);--copper:light-dark(#c8742c,#e0954f);--grid:light-dark(#e9eef6,#18212e)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 Inter,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:Barlow,Inter,sans-serif;line-height:1.1;margin:0;text-wrap:balance}
+a{color:var(--blue)}
+.wrap{max-width:1040px;margin:0 auto;padding:0 max(4vw,14px)}
+nav{position:sticky;top:0;z-index:5;background:color-mix(in srgb,var(--card) 92%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+nav .wrap{display:flex;align-items:center;gap:14px;min-height:60px;flex-wrap:wrap}
+.logo{display:grid;place-items:center;width:34px;height:34px;border-radius:8px;background:var(--blue);color:#fff;font:700 15px Barlow,sans-serif}
+.brand{font:600 15px Barlow,sans-serif;letter-spacing:.02em}
+.links{display:flex;gap:4px;margin-left:auto;flex-wrap:wrap}
+.links a{color:var(--mute);text-decoration:none;font-size:14px;padding:8px 10px;border-radius:8px}
+.links a:hover{color:var(--ink);background:var(--blue-soft)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;margin:18px 0;overflow:hidden}
+.pad{padding:clamp(20px,3.5vw,36px)}
+.banner{position:relative;height:clamp(170px,26vw,250px);background:var(--blue-soft)}
+.banner svg{position:absolute;inset:0;width:100%;height:100%}
+.trace{fill:none;stroke:var(--copper);stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
+.pad-dot{fill:var(--card);stroke:var(--copper);stroke-width:2.2}
+.wave{fill:none;stroke:var(--blue);stroke-width:2.6;stroke-dasharray:8 0;animation:run 6s linear infinite}
+@keyframes run{from{transform:translateX(0)}to{transform:translateX(-120px)}}
+@media (prefers-reduced-motion:reduce){.wave{animation:none}}
+.hero{position:relative;padding:0 clamp(20px,3.5vw,36px) clamp(22px,3.5vw,34px)}
+.avatar{width:120px;height:120px;border-radius:50%;margin-top:-62px;border:5px solid var(--card);object-fit:cover;background:linear-gradient(135deg,var(--blue),#5a8cff);display:grid;place-items:center;color:#fff;font:700 42px Barlow,sans-serif;position:relative}
+.hero h1{font-size:clamp(34px,5vw,48px);margin-top:14px}
+.role{color:var(--blue);font:600 16px Barlow,sans-serif;letter-spacing:.06em;margin:6px 0 12px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 18px;color:var(--mute);font-size:14px}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+.btn{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 18px;border-radius:9px;font-weight:600;font-size:15px;text-decoration:none;border:1.5px solid var(--blue);color:var(--blue);background:transparent;cursor:pointer}
+.btn.solid{background:var(--blue);color:#fff}
+.btn:focus-visible,.chip:focus-visible,input:focus-visible{outline:3px solid color-mix(in srgb,var(--blue) 45%,transparent);outline-offset:2px}
+.label{color:var(--blue);font:600 13px Barlow,sans-serif;letter-spacing:.08em;margin-bottom:8px}
+.card h2{font-size:clamp(24px,3vw,30px);margin-bottom:10px}
+.lead{color:var(--mute);max-width:66ch;margin:0}
+.job{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 16px;padding:18px 0;border-top:1px solid var(--line)}
+.job:first-of-type{border-top:0}
+.job h3{font-size:19px}.job .when{color:var(--mute);font-size:14px;white-space:nowrap}
+.job .where{grid-column:1/-1;color:var(--mute);font-size:14px}
+.job ul{grid-column:1/-1;margin:8px 0 0;padding-left:20px}
+.todo{color:var(--copper);font-style:italic}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:0 36px}
+.focus{list-style:none;padding:0;margin:0}
+.focus li{padding:10px 0;border-top:1px solid var(--line)}
+.focus b{display:block;font-weight:600}
+.focus span{color:var(--mute);font-size:14px}
+.stack{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.tag{font-size:13px;padding:5px 11px;border-radius:999px;background:var(--blue-soft);color:var(--ink);border:1px solid var(--line)}
+.hl{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:clamp(18px,3vw,34px);padding:26px 0;border-top:1px solid var(--line);align-items:start}
+.hl:first-of-type{border-top:0}
+.hl .fig{border-radius:12px;background:var(--blue-soft);aspect-ratio:4/3;border:1px solid var(--line)}
+.hl .fig svg{width:100%;height:100%;display:block}
+.hl .fig.photo{aspect-ratio:auto;background:#fff;padding:10px;display:block}
+.hl .fig.photo img{width:100%;height:auto;display:block}
+.cap{color:var(--mute);font-size:13px;margin:8px 0 0}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:6px 0 14px}
+.stats div{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--blue-soft)}
+.stats b{display:block;font:700 22px Barlow,sans-serif;color:var(--blue);white-space:nowrap}
+.stats span{font-size:13px;color:var(--mute);line-height:1.35;display:block}
+.hl .vid{width:100%;height:auto;display:block;border-radius:12px;border:1px solid var(--line);background:#000}
+.kicker{color:var(--mute);font-size:13px;font-weight:600;margin-bottom:6px}
+.hl h3{font-size:clamp(21px,2.6vw,25px);margin-bottom:10px}
+.hl p{margin:0 0 10px}
+.tools{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:14px 0 18px}
+.chip{min-height:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:500 14px Inter,sans-serif;cursor:pointer}
+.chip[aria-pressed=true]{background:var(--blue);border-color:var(--blue);color:#fff}
+.chip small{opacity:.7;margin-left:4px}
+.search{flex:1 1 220px;min-height:44px;padding:0 14px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:16px Inter,sans-serif}
+.count{color:var(--mute);font-size:14px;margin:0 0 12px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr));gap:14px}
+.proj{border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column;gap:8px;background:var(--card)}
+.proj .cat{font:600 12px Barlow,sans-serif;letter-spacing:.08em;color:var(--copper)}
+.proj h3{font-size:19px}
+.proj .unit{color:var(--mute);font-size:13px}
+.proj p{margin:0;font-size:15px}
+.proj .stack{margin-top:auto;padding-top:6px}
+.empty{color:var(--mute);padding:20px 0}
+.contact{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+footer{color:var(--mute);font-size:13px;text-align:center;padding:26px 0 40px}
+@media(max-width:600px){.hl{grid-template-columns:minmax(0,1fr)}.links{display:none}.avatar{width:96px;height:96px;margin-top:-50px;font-size:34px}}
+</style>
+</head>
+<body>
+
+<nav><div class="wrap">
+  <span class="logo">VL</span><span class="brand">VANGBOEI LAITHANG · ELECTRICAL ENGINEERING</span>
+  <div class="links"><a href="#about">About</a><a href="#experience">Experience</a><a href="#projects">Projects</a><a href="#contact">Contact</a></div>
+</div></nav>
+
+<main class="wrap">
+
+<section class="card" aria-label="Profile">
+  <div class="banner" aria-hidden="true">
+    <svg viewBox="0 0 1000 250" preserveAspectRatio="xMidYMid slice">
+      <defs><pattern id="g" width="20" height="20" patternUnits="userSpaceOnUse"><path d="M20 0H0V20" fill="none" stroke="var(--grid)" stroke-width="1"/></pattern>
+      <clipPath id="scr"><rect x="640" y="40" width="300" height="160" rx="10"/></clipPath></defs>
+      <rect width="1000" height="250" fill="url(#g)"/>
+      <path class="trace" d="M0 70H120L150 100H300L330 70H420"/>
+      <path class="trace" d="M0 160H90L130 120H260"/>
+      <path class="trace" d="M0 215H200L230 185H380L410 215H560"/>
+      <path class="trace" d="M420 70V130H520"/><path class="trace" d="M260 120V150H470"/>
+      <path class="trace" d="M520 130H600L640 120"/><path class="trace" d="M560 215V170H640"/>
+      <path class="trace" d="M470 150L500 180V215"/>
+      <g fill="var(--card)" stroke="var(--copper)" stroke-width="2.2">
+        <rect x="330" y="118" width="70" height="26" rx="4"/><rect x="150" y="200" width="44" height="30" rx="4"/>
+      </g>
+      <g><circle class="pad-dot" cx="120" cy="70" r="6"/><circle class="pad-dot" cx="420" cy="70" r="6"/><circle class="pad-dot" cx="260" cy="120" r="6"/><circle class="pad-dot" cx="520" cy="130" r="6"/><circle class="pad-dot" cx="560" cy="215" r="6"/><circle class="pad-dot" cx="470" cy="150" r="6"/></g>
+      <rect x="640" y="40" width="300" height="160" rx="10" fill="var(--card)" stroke="var(--line)" stroke-width="2"/>
+      <g clip-path="url(#scr)">
+        <path d="M640 120H940M790 40V200" stroke="var(--line)" stroke-width="1"/>
+        <path class="wave" d="M640 120 C655 70 675 70 690 120 S725 170 740 120 S775 70 790 120 S825 170 840 120 S875 70 890 120 S925 170 940 120 S975 70 990 120 S1025 170 1040 120 S1075 70 1090 120"/>
+      </g>
+    </svg>
+  </div>
+  <div class="hero">
+    <img class="avatar" src="assets/profile.jpg" alt="Photo of Vangboei Laithang" width="120" height="120">
+    <h1>Vangboei Laithang</h1>
+    <div class="role">ELECTRICAL ENGINEERING GRADUATE</div>
+    <div class="meta">
+      <span>Brisbane, QLD</span><span>QUT · B.Eng (Hons) Electrical</span><span>Minors: Robotics, Software Engineering</span><span>Open to graduate roles across Australia</span>
+    </div>
+    <div class="btns">
+      <a class="btn solid" href="assets/resume.pdf" download="Vangboei_Laithang_Resume.pdf">Download resume</a>
+      <a class="btn" href="#projects">View projects →</a>
+      <a class="btn" href="#contact">Contact</a>
+    </div>
+  </div>
+</section>
+
+<section class="card pad" id="about">
+  <div class="label">ABOUT</div>
+  <h2>From power systems to perception and the cloud.</h2>
+  <p class="lead">I'm an Electrical Engineering (Honours) graduate from QUT, with minors in Robotics and Software Engineering. My work spans relay-logic control circuits, business apps on Microsoft Power Platform, camera–LiDAR perception for autonomous vehicles, harmonic analysis of grid-connected solar inverters and containerised AWS services. I'm looking for graduate engineering roles anywhere in Australia, including defence.</p>
+</section>
+
+<section class="card pad" id="experience">
+  <div class="label">EXPERIENCE</div>
+  <div class="job">
+    <h3>Software Developer Intern</h3><span class="when">Jul – Oct 2025</span>
+    <span class="where">Queensland Department of the Environment, Tourism, Science and Innovation · Dutton Park, QLD</span>
+    <ul>
+      <li>Built a Microsoft Power Apps app for the water pollution monitoring team, with live search, forms that auto-fill from a Location ID, and separate view, add, edit and delete modes.</li>
+      <li>Moved the team's SQL data into Dataverse and built Power Automate flows to keep it in sync. Cut the flow's run time to under 10 minutes by separating the source and output tables, and checked all 27 mapped fields against the original data.</li>
+      <li>Added an approval workflow with role-based access, so edits from field staff wait for an administrator's sign-off before they go live.</li>
+    </ul>
+  </div>
+  <div class="job">
+    <h3>Electrical Engineering Intern</h3><span class="when">Nov 2025 – Mar 2026</span>
+    <span class="where">Unidus Community Conference Centre · Willawong, QLD</span>
+    <ul>
+      <li>Designed a 24 V fail-safe relay-logic circuit that detects open-circuit wiring faults on a three-phase motor, simulated it in Falstad, then simplified it from three monitoring lines to one after design review to save cost and enclosure space.</li>
+      <li>Carried out electrical audits of power outlets, lighting and emergency lighting, and compared the findings against as-built records.</li>
+      <li>Compared three vendor proposals to replace an ageing solar inverter and add battery storage, and handled contractor quotes for facility repairs.</li>
+    </ul>
+  </div>
+  <div class="job">
+    <h3>Team Member</h3><span class="when">Oct 2026 – Present</span>
+    <span class="where">Coles · Brisbane, QLD</span>
+    <ul><li>Night fill and trading-hours shifts: stocking to deadline overnight and serving customers during the day, including handling difficult situations calmly.</li></ul>
+  </div>
+</section>
+
+<section class="card pad">
+  <div class="two">
+    <div>
+      <div class="label">EDUCATION</div>
+      <h3 style="font-size:21px">Bachelor of Engineering (Honours), Electrical</h3>
+      <p class="lead" style="margin-top:6px">Queensland University of Technology · 2023 – 2026<br>Second Class Honours, Division B. Minors in Robotics and Software Engineering. Honours project on detecting flooded roads for autonomous vehicles.</p>
+    </div>
+    <div>
+      <div class="label">FOCUS AREAS</div>
+      <ul class="focus">
+        <li><b>Perception and computer vision</b><span>YOLO detection, semantic road segmentation, LiDAR projection</span></li>
+        <li><b>Power electronics and power quality</b><span>PV inverters, harmonics, filter design in Simulink</span></li>
+        <li><b>Cloud and software</b><span>AWS ECS Fargate, ALB, S3, DynamoDB, Bedrock, Docker</span></li>
+        <li><b>Control circuits and embedded</b><span>24 V relay logic, fault detection, motor protection</span></li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="card pad">
+  <div class="label">TECH STACK</div>
+  <h2>Languages and tools I work with.</h2>
+  <div class="stack" id="stack"></div>
+</section>
+
+<section class="card pad" id="projects">
+  <div class="label">PROJECTS</div>
+  <h2>Selected work.</h2>
+  <p class="lead">Honours research, university projects and what I build in my own time.</p>
+
+  <div class="hl">
+    <div>
+      <figure class="flood-anim" style="margin:0">
+        <svg id="floodSvg" viewBox="0 0 640 360" role="img" aria-label="Animated illustration of the pipeline: the road is shaded green, water on the road is boxed in red with its distance counting down, water beside the road is boxed in yellow and ignored, and LiDAR points leave a gap over the water while a small circle just below the box gives the distance." style="width:100%;height:auto;display:block;border-radius:10px;background:#0f1722">
+          <defs>
+            <linearGradient id="faSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b3f5c"/><stop offset="1" stop-color="#6d87a6"/></linearGradient>
+            <linearGradient id="faGround" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d5a35"/><stop offset="1" stop-color="#22351f"/></linearGradient>
+            <linearGradient id="faWater" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fc3e4"/><stop offset="1" stop-color="#4f7fae"/></linearGradient>
+          </defs>
+          <rect width="640" height="150" fill="url(#faSky)"/>
+          <rect y="150" width="640" height="210" fill="url(#faGround)"/>
+          <g fill="#1d2c1a" opacity=".9">
+            <path d="M0 150 Q40 120 80 150 Q120 112 170 150Z"/><path d="M470 150 Q520 115 560 150 Q600 125 640 150Z"/>
+          </g>
+          <polygon points="292,150 348,150 600,360 40,360" fill="#55585e"/>
+          <polygon id="faRoad" points="292,150 348,150 600,360 40,360" fill="#2ecc71" opacity=".28"/>
+          <g id="faLane" stroke="#e9e3c9" stroke-width="3" stroke-dasharray="14 18" opacity=".7"><line x1="320" y1="152" x2="320" y2="360"/></g>
+          <ellipse id="faSide" cx="545" cy="215" rx="42" ry="9" fill="url(#faWater)" opacity=".9"/>
+          <ellipse id="faFlood" cx="320" cy="200" rx="60" ry="10" fill="url(#faWater)"/>
+          <g id="faDots"></g>
+          <circle id="faRing" cx="320" cy="220" r="10" fill="none" stroke="#e0954f" stroke-width="2.5"/>
+          <rect id="faSideBox" x="498" y="200" width="94" height="30" fill="none" stroke="#f5c542" stroke-width="2" stroke-dasharray="6 4"/>
+          <text x="545" y="194" text-anchor="middle" font-family="Inter,sans-serif" font-size="12" font-weight="600" fill="#f5c542">off road, ignored</text>
+          <rect id="faBox" x="250" y="185" width="140" height="30" fill="none" stroke="#ff4d4f" stroke-width="3"/>
+          <rect id="faTag" x="250" y="163" width="140" height="22" fill="#ff4d4f"/>
+          <text id="faTxt" x="320" y="179" text-anchor="middle" font-family="Inter,sans-serif" font-size="13" font-weight="700" fill="#fff">FLOOD · 40.0 m</text>
+          <g font-family="Inter,sans-serif" font-size="12" fill="#e8edf4">
+            <rect x="12" y="12" width="196" height="64" rx="8" fill="#0c1118" opacity=".72"/>
+            <circle cx="26" cy="28" r="5" fill="#2ecc71"/><text x="38" y="32">road (segmentation)</text>
+            <circle cx="26" cy="46" r="5" fill="#ff4d4f"/><text x="38" y="50">flood on the road (detector)</text>
+            <circle cx="26" cy="64" r="5" fill="#e0954f"/><text x="38" y="68">LiDAR points used for distance</text>
+          </g>
+        </svg>
+        <figcaption class="cap">Illustration of how the pipeline works (not real footage). The road is found first, water on it is boxed and kept, water beside it is ignored, and the distance comes from LiDAR points on the road just below the water, because the water itself returns almost none.</figcaption>
+      </figure>
+      <script>
+      (function(){
+        var svg=document.getElementById('floodSvg'); if(!svg) return;
+        var NS='http://www.w3.org/2000/svg', g=document.getElementById('faDots');
+        var fl=document.getElementById('faFlood'), box=document.getElementById('faBox'), tag=document.getElementById('faTag'),
+            txt=document.getElementById('faTxt'), ring=document.getElementById('faRing'), lane=document.getElementById('faLane');
+        // LiDAR scan rows in perspective (static frame of points on the road)
+        var rows=[], H=150, B=360;
+        for(var i=0;i<16;i++){ var f=Math.pow((i+1)/16,1.6), y=H+(B-H)*f, half=28+(260-28)*f, n=Math.round(8+30*f), pts=[];
+          for(var k=0;k<n;k++){ var x=320-half+(2*half)*(k+.5)/n, c=document.createElementNS(NS,'circle');
+            c.setAttribute('cx',x.toFixed(1)); c.setAttribute('cy',y.toFixed(1)); c.setAttribute('r',(1+1.6*f).toFixed(2));
+            g.appendChild(c); pts.push(c);} rows.push({y:y,pts:pts}); }
+        var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        function draw(t){
+          var e=t*t, cy=175+120*e, f=(cy-H)/(B-H), rx=20+170*f, ry=4+22*f, d=40-32*e;
+          fl.setAttribute('cy',cy); fl.setAttribute('rx',rx); fl.setAttribute('ry',ry);
+          var bx=320-rx-6, by=cy-ry-5, bw=2*rx+12, bh=2*ry+10;
+          box.setAttribute('x',bx); box.setAttribute('y',by); box.setAttribute('width',bw); box.setAttribute('height',bh);
+          tag.setAttribute('x',bx); tag.setAttribute('y',by-22); tag.setAttribute('width',bw);
+          txt.setAttribute('y',by-6); txt.textContent='FLOOD · '+d.toFixed(1)+' m';
+          var ry2=by+bh+6+12*f, rr=6+16*f; ring.setAttribute('cy',ry2); ring.setAttribute('r',rr);
+          for(var i=0;i<rows.length;i++){ var R=rows[i];
+            for(var k=0;k<R.pts.length;k++){ var c=R.pts[k], x=+c.getAttribute('cx'), dx=(x-320)/(rx+4), dy=(R.y-cy)/(ry+4);
+              var inWater=dx*dx+dy*dy<1, inRing=Math.hypot(x-320,R.y-ry2)<rr;
+              c.setAttribute('fill', inRing?'#e0954f':'#e8edf4'); c.setAttribute('opacity', inWater?0:(inRing?1:.55)); } }
+          lane.setAttribute('stroke-dashoffset',(-t*320).toFixed(1));
+        }
+        if(reduce){ draw(.55); return; }
+        var T=7000, t0=null;
+        function loop(now){ if(t0===null) t0=now; var t=((now-t0)%T)/T; draw(t<.9?t/.9:1); requestAnimationFrame(loop); }
+        requestAnimationFrame(loop);
+      })();
+      </script>
+    </div>
+    <div>
+      <div class="kicker">HONOURS PROJECT · QUT EGH490 · 2026 · SUPERVISOR: DR CONNOR MALONE</div>
+      <h3>Autonomous Vehicle Perception: Detecting Flooded Roads</h3>
+      <p>A self-driving car has to spot floodwater early, know whether it is on the road, and know how far away it is. Water is hard to sense: it reflects the LiDAR's laser away and leaves gaps in the point cloud, and a camera alone gives no distance. I built a camera–LiDAR pipeline on QUT's Flooded Road Environments Dataset (FRED).</p>
+      <p>A lightweight segmentation network (YOLO26n-sem, 1.6 million parameters) learns the drivable road, and a YOLOv8n detector, tuned with a 50-trial Weights &amp; Biases sweep, boxes each flood. A flood is kept only if enough of its box sits on the road, so water beside the road is ignored. Its distance is read from the projected LiDAR points in a small circle on the road just below the box, because the water itself returns almost no points.</p>
+      <div class="stats">
+        <div><b>0.964</b><span>road IoU on a location never seen in training</span></div>
+        <div><b>3 of 313</b><span>dry-road frames with a false alarm</span></div>
+        <div><b>±0.09 m</b><span>distance repeatability with the car stopped</span></div>
+        <div><b>77 ms</b><span>per frame for the full pipeline on an RTX 4070</span></div>
+      </div>
+      <div class="stack"><span class="tag">Python</span><span class="tag">YOLOv8n</span><span class="tag">YOLO26n-sem</span><span class="tag">Semantic segmentation</span><span class="tag">LiDAR</span><span class="tag">Weights &amp; Biases</span></div>
+    </div>
+  </div>
+
+  <div class="hl">
+    <div class="fig" aria-hidden="true"><svg viewBox="0 0 400 300">
+      <path d="M30 150H370" stroke="var(--line)" stroke-width="2"/>
+      <path d="M30 150 C60 60 90 60 115 150 S170 240 200 150 S255 60 285 150 S340 240 370 150" fill="none" stroke="var(--blue)" stroke-width="3"/>
+      <path d="M30 150 C45 95 55 120 70 85 S95 110 115 150 S140 190 160 215 S185 180 200 150 S225 110 240 85 S265 120 285 150 S310 205 325 215 S355 180 370 150" fill="none" stroke="var(--copper)" stroke-width="2.5"/>
+      <g font-family="Inter" font-size="13" fill="var(--mute)"><text x="30" y="270">fundamental</text><text x="250" y="270" fill="var(--copper)">distorted current</text></g>
+    </svg></div>
+    <div>
+      <div class="kicker">EGH454 POWER ELECTRONICS · 2026</div>
+      <h3>Harmonics of a 1.5 MW Grid-Connected PV Inverter</h3>
+      <p>Studied the harmonic distortion a 1.5 MW solar inverter injects at a 33 kV point of common coupling, designed a harmonic filter, and assessed the effect of harmonics on insulation life. Modelled in MATLAB/Simulink and written up as an IEEE-format paper.</p>
+      <div class="stack"><span class="tag">MATLAB</span><span class="tag">Simulink</span><span class="tag">Power quality</span><span class="tag">Filter design</span><span class="tag">LaTeX</span></div>
+    </div>
+  </div>
+
+  <div class="hl">
+    <div>
+      <video class="vid" src="assets/robot-web.mp4" poster="assets/robot-poster.jpg" autoplay muted loop playsinline controls preload="metadata" aria-label="Particle filter localising a PenguinPi robot in a 2 m arena"></video>
+      <p class="cap">Live run: the particle cloud (left) collapses onto the robot as it sees the beacons, then it drives to the target.</p>
+      <a class="fig photo" href="assets/robot-pf-before-after.jpg" target="_blank" rel="noopener" style="margin-top:12px"><img src="assets/robot-pf-before-after.jpg" alt="Two particle filter plots of the 2 m arena with five numbered beacons. Left: particles spread evenly everywhere, spread 0.817 m. Right: particles gathered near the target, spread 0.120 m, with the estimated path in blue." loading="lazy"></a>
+      <p class="cap">Before and after: particles spread over the whole arena at the start (σ = 0.82 m), then gathered on the robot once localised (σ = 0.12 m), with the estimated path in blue. Click to enlarge.</p>
+    </div>
+    <div>
+      <div class="kicker">EGB439 ADVANCED ROBOTICS · QUT · 2026</div>
+      <h3>Particle Filter Localisation on a Real Robot</h3>
+      <p>The robot starts with no idea where it is. I spread thousands of particles evenly across a 2 m × 2 m arena, then updated them from wheel odometry and the robot's camera sightings of numbered beacons. Particles that disagree with what the camera sees die off, and the rest close in on the robot's true position.</p>
+      <p>In the run shown, the particle spread shrinks from about 0.8 m to 0.12 m and the filter reports the robot as localised. The robot then uses its estimated position to drive to a target marked on the map.</p>
+      <div class="stack"><span class="tag">Python</span><span class="tag">Particle filter</span><span class="tag">Localisation</span><span class="tag">Computer vision</span><span class="tag">PenguinPi</span></div>
+    </div>
+  </div>
+
+  <div class="hl">
+    <div>
+      <video class="vid" src="assets/transcoder-web.mp4" poster="assets/transcoder-poster.jpg" autoplay muted loop playsinline controls preload="metadata" aria-label="Web transcoder page converting videos, with queue and done lists"></video>
+      <p class="cap">An 11-minute 1080p video is cut into 4 parts and converted in parallel while the workers scale up.</p>
+      <a class="fig photo" href="assets/A3_2.png" target="_blank" rel="noopener" style="margin-top:12px"><img src="assets/A3_2.png" alt="Architecture: browser, load balancer, API service, message queue with dead-letter queue, auto-scaling ffmpeg worker containers, object storage, cache, NoSQL job database, monitoring alarm and scheduled clean-up." loading="lazy"></a>
+      <p class="cap">Architecture. Click to enlarge.</p>
+    </div>
+    <div>
+      <div class="kicker">CAB432 CLOUD COMPUTING · QUT · 2026</div>
+      <h3>Auto-Scaling Cloud Video Transcoder</h3>
+      <p>A web app that converts any uploaded video to H.264 at its original quality. Videos upload straight to object storage through a signed URL, an API service behind a load balancer queues each job, and ffmpeg worker containers on AWS ECS Fargate pull jobs from the queue.</p>
+      <p>The workers scale from zero to many based on queue length, so nothing runs while it's idle. Long videos are split into parts and converted by several workers at once, failed jobs go to a dead-letter queue, repeat uploads are served from a cache, and a scheduled job deletes results after two hours.</p>
+      <p>In the demo, an 11-minute 1080p video is split into four parts with six workers running, and non-video files are rejected with a clear message.</p>
+      <div class="stack"><span class="tag">AWS ECS Fargate</span><span class="tag">Load balancer</span><span class="tag">Message queue</span><span class="tag">Auto-scaling</span><span class="tag">ffmpeg</span><span class="tag">Docker</span></div>
+    </div>
+  </div>
+
+  <div class="hl">
+    <div>
+      <a class="fig photo" href="assets/relay-schematic.png" target="_blank" rel="noopener"><img src="assets/relay-schematic.png" alt="Relay-logic schematic: a power supply, 20 A breaker and soft starter feed a three-phase motor; a timer relay and three cascaded 24 V monitoring relays give a 24 V output only when all three phase lines are live." loading="lazy"></a>
+      <p class="cap">First design: three cascaded monitoring relays, one per phase. Click to enlarge.</p>
+      <a class="fig photo" href="enclosure/index.html" target="_blank" rel="noopener" style="margin-top:12px;background:#222"><img src="assets/enclosure.jpg" alt="Interactive mock-up of the control enclosure: breakers, contactors, TeSys starter, 24 V supply, relay timer, terminal blocks, e-stop and reset, ammeter, 4-20 mA transducer and a running fan at 1454 RPM." loading="lazy"></a>
+      <p class="cap">Interactive enclosure mock-up (work in progress). Click to try it.</p>
+    </div>
+    <div>
+      <div class="kicker">ELECTRICAL ENGINEERING INTERNSHIP · UNIDUS · 2026</div>
+      <h3>Fail-Safe Phase Monitoring for a Three-Phase Motor</h3>
+      <p>A 24 V relay-logic circuit that catches an open-circuit wiring fault on a critical three-phase motor before it can damage the equipment. After power-on, a timer relay waits 6 seconds for the motor to start, then the monitoring relays check the phase lines. The circuit outputs 24 V only while all three lines are live. If any line drops, the output is lost and the fail-safe trips.</p>
+      <p>I simulated the logic in Falstad and presented the design at fortnightly reviews. The first version used a separate monitoring line for each phase, as shown. After review, I simplified it to a single monitoring line and detector, which cut components, cost and space in the enclosure while meeting the same safety requirements.</p>
+      <p>To plan the enclosure, I also built an interactive browser mock-up of the panel: breakers, contactors, a TeSys motor starter, the 24 V supply, the relay timer, terminal blocks, an ammeter and a 4–20 mA transducer. Hold the switch for 6 seconds and the circuit latches and the motor runs. Press the e-stop and it shuts down until it's reset.</p>
+      <p><a class="btn" href="enclosure/index.html" target="_blank" rel="noopener">Try the interactive panel →</a></p>
+      <div class="stack"><span class="tag">Relay logic</span><span class="tag">24 V control</span><span class="tag">Three-phase</span><span class="tag">Falstad</span><span class="tag">Fail-safe design</span><span class="tag">HTML/CSS/JS</span></div>
+    </div>
+  </div>
+
+  <div class="label" style="margin-top:26px">ALL PROJECTS</div>
+  <div class="tools">
+    <div id="chips" style="display:flex;gap:8px;flex-wrap:wrap"></div>
+    <input class="search" id="q" type="search" placeholder="Search projects" aria-label="Search projects">
+  </div>
+  <p class="count" id="count"></p>
+  <div class="grid" id="grid"></div>
+</section>
+
+<section class="card pad" id="contact">
+  <div class="label">CONTACT</div>
+  <h2>Let's talk.</h2>
+  <p class="lead">I'm available for graduate engineering roles from early 2027 and happy to relocate within Australia.</p>
+  <div class="contact">
+    <a class="btn solid" href="mailto:vlaithang04@outlook.com">vlaithang04@outlook.com</a>
+    <a class="btn" href="https://www.linkedin.com/in/vangboei-laithang-83b16b280">LinkedIn</a>
+    <a class="btn" href="https://github.com/Vthang21">GitHub</a>
+  </div>
+</section>
+
+<footer>© 2026 Vangboei Laithang · Brisbane, QLD</footer>
+</main>
+
+<script>
+{
+const stack=["Python","MATLAB","Power Apps","Power Automate","Dataverse","SQL","Falstad","Simulink","LaTeX","Git","Docker","AWS ECS / Fargate","ALB","S3","DynamoDB","Amazon Bedrock","FastMCP","YOLO","LiDAR","Draw.io"];
+document.getElementById('stack').innerHTML=stack.map(s=>`<span class="tag">${s}</span>`).join('');
+
+const projects=[
+ {cat:"Software",t:"Flooded Road Detection Pipeline",u:"EGH490 Honours · 2026",d:"Road segmentation (0.964 IoU on an unseen location), a tuned YOLOv8n flood detector gated to the road, and LiDAR distance to the water.",tags:["Python","YOLO","Segmentation","LiDAR"]},
+ {cat:"Electronics",t:"Fail-Safe Phase Monitoring Circuit",u:"Unidus internship · 2026",d:"A 24 V relay-logic circuit that detects an open-circuit phase on a three-phase motor and trips a fail-safe, simulated in Falstad and simplified to a single monitoring line.",tags:["Relay logic","Three-phase","Falstad"]},
+ {cat:"Electronics",t:"PV Inverter Harmonics and Filter Design",u:"EGH454 · 2026",d:"Harmonic study of a 1.5 MW PV inverter at a 33 kV PCC, filter design and insulation-life assessment.",tags:["Simulink","Power quality"]},
+ {cat:"Robotics",t:"Particle Filter Robot Localisation",u:"EGB439 Advanced Robotics · 2026",d:"Global localisation of a PenguinPi robot from camera sightings of beacons and wheel odometry, then driving to a target from the estimated position.",tags:["Python","Particle filter","Robotics"]},
+ {cat:"Software",t:"Strobe Assistant: AI Chat on AWS",u:"CAB432 Cloud Computing · Assessment 2 · 2026",d:"A chat assistant for the Strobe photo app, served from ECS Fargate behind a load balancer over WebSockets, using Amazon Bedrock with a FastMCP tool server, S3 media and DynamoDB.",tags:["AWS","ECS Fargate","Bedrock","Docker"]},
+ {cat:"Software",t:"Auto-Scaling Cloud Video Transcoder",u:"CAB432 Cloud Computing · 2026",d:"Converts uploaded videos to H.264 with ffmpeg workers on ECS Fargate that scale from zero by queue length, splitting long videos across several workers.",tags:["AWS","ECS Fargate","Auto-scaling","ffmpeg"]},
+];
+const cats=["All","Software","Electronics","Robotics"];
+let cur="All";
+const chips=document.getElementById('chips'),grid=document.getElementById('grid'),q=document.getElementById('q'),count=document.getElementById('count');
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function drawChips(){
+  chips.innerHTML=cats.map(c=>{const n=c==="All"?projects.length:projects.filter(p=>p.cat===c).length;
+    return `<button class="chip" data-c="${c}" aria-pressed="${c===cur}">${c}<small>${n}</small></button>`}).join('');
+}
+function draw(){
+  const term=q.value.trim().toLowerCase();
+  const list=projects.filter(p=>(cur==="All"||p.cat===cur)&&(!term||[p.t,p.u,p.d,...p.tags].join(' ').toLowerCase().includes(term)));
+  count.textContent=`Showing ${list.length} of ${projects.length} projects`;
+  grid.innerHTML=list.length?list.map(p=>`<article class="proj"><span class="cat">${esc(p.cat.toUpperCase())}</span><h3>${esc(p.t)}</h3><span class="unit">${esc(p.u)}</span><p>${esc(p.d)}</p><div class="stack">${p.tags.map(t=>`<span class="tag">${esc(t)}</span>`).join('')}</div></article>`).join(''):'<p class="empty">No projects match that search.</p>';
+}
+chips.addEventListener('click',e=>{const b=e.target.closest('.chip');if(!b)return;cur=b.dataset.c;drawChips();draw()});
+q.addEventListener('input',draw);
+drawChips();draw();
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,57 @@
+body {
+    background: transparent; /* Allows it to sit nicely in your panel */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+.pilot-light-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80px;
+}
+
+.bezel {
+    width: 40px;
+    height: 40px;
+    background: #333; /* The plastic/metal ring */
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid #111;
+    box-shadow: 0 4px 4px rgba(0,0,0,0.5);
+}
+
+.lens {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+/* State: E-Stop NOT active (Dull red) */
+.red-off {
+    background: radial-gradient(circle, #500 0%, #200 100%);
+    border: 1px solid #111;
+}
+
+/* State: E-Stop ACTIVE (Glowing red) */
+.red-on {
+    background: radial-gradient(circle, #f00 20%, #800 100%);
+    box-shadow: 0 0 20px #f00, inset 0 0 8px #fff;
+    border: 1px solid #f99;
+}
+
+.label {
+    margin-top: 8px;
+    color: #ccc;
+    font-size: 10px;
+    font-weight: bold;
+    text-shadow: 1px 1px 2px black;
+    text-align: center;
+}

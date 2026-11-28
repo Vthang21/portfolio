@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Industrial Panel - Final Build</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Critical: Allow overflow to be visible */
+        .panel {
+            overflow: visible !important;
+        }
+        
+        /* Ghost container for injected content */
+        .l4-injection-point {
+            display: contents;
+        }
+    </style>
+</head>
+<body>
+
+<svg style="display: none;">
+  <symbol id="panel-wiring" viewBox="0 0 600 900"></symbol>
+</svg>
+
+<div class="panel">
+    
+    <div class="rail-group" id="rail-1-shelf" style="top: 8%; left: 0; width: 100%;">
+        <div class="din-rail" style="top: 45px;"></div> 
+        <div class="box cb" style="width: 6%; height: 100px; left: 8%;">CB1</div>
+        <div class="box cb" style="width: 6%; height: 100px; left: 15%;">CB2</div>
+        <div class="box cb" style="width: 6%; height: 100px; left: 22%;">CB3</div>
+        <div class="box cb" style="width: 6%; height: 100px; left: 29%;">CB4</div>
+
+        <div class="box contactor" style="width: 4%; height: 80px; top: 10px; left: 45%;">1</div>
+        <div class="box contactor" style="width: 4%; height: 80px; top: 10px; left: 50%;">2</div>
+        <div class="box contactor" style="width: 5%; height: 80px; top: 10px; left: 55%;">3</div>
+        <div class="box contactor" style="width: 4%; height: 80px; top: 10px; left: 60%;">4</div>
+    </div>
+
+    <div class="rail-group" id="rail-2-shelf" style="top: 40%; left: 0; width: 100%;">
+        <div class="din-rail" style="top: 45px;"></div>
+        <div class="box psu" style="width: 18%; height: 90px; left: 8%;">24V DC</div>
+        <div class="box contactor" style="width: 20%; height: 175px; top: -45px; left: 40%; position: absolute;">
+            TeSys
+            <div class="screw-philips" style="top: 9px;left:5%;"></div>
+            <div class="screw-philips" style="top: 16px; left:40%; transform: translateY(-50%);"></div>
+            <div class="screw-philips" style="top: 9px; left:75%;"></div>
+            <div class="screw-philips" style="top: 30px;left:30%;"></div>
+            <div class="screw-philips" style="top: 37px; left:52%; transform: translateY(-50%);"></div>
+            <div class="screw-philips" style="top: 30px; left:75%;"></div>
+            <div class="screw-philips" style="bottom: 9px;left:5%;"></div>
+            <div class="screw-philips" style="bottom: 2px; left:40%; transform: translateY(-50%);"></div>
+            <div class="screw-philips" style="bottom: 9px; left:75%;"></div>
+            <div class="screw-philips" style="bottom: 100px;"></div>
+            <div class="screw-philips" style="bottom: 93px; left:5%; transform: translateY(-50%);"></div>
+            <div class="screw-philips" style="bottom: 100px; left:75%;"></div>
+            <div class="screw-philips" style="bottom: 50px;left:52%;"></div>
+            <div class="screw-philips" style="bottom: 43px; left:10%; transform: translateY(-50%);"></div>
+            <div class="screw-philips" style="bottom: 50px; left:76%;"></div>
+            <div class="screw-philips" style="bottom: 50px; left:30%;"></div>
+            <div class="inner-spec-box" style="top: 25%; height:20%; width: 95%; left: 2%"></div>
+            <div class="inner-spec-box" style="bottom: 25%; height:20%; width: 95%; left: 2%"></div>
+        </div>
+    </div>
+
+    <div class="rail-group" id="rail-3-shelf" style="top: 75%; left: 0; width: 100%; --a: -5%; --b: 10px;">
+        <div class="din-rail" style="top: 45px; width: 94%; left: 3%;"></div>
+        <div class="box contactor" style="width: 2.5%; height: 90px; left: calc(10% + var(--a)); top: calc(0px + var(--b));">1</div>
+        <div class="box contactor" style="width: 2.5%; height: 90px; left: calc(13% + var(--a)); top: calc(0px + var(--b));">2</div>
+        <div class="box contactor" style="width: 2.5%; height: 90px; left: calc(16% + var(--a)); top: calc(0px + var(--b));">3</div>
+        <div class="box contactor" style="width: 2.5%; height: 90px; left: calc(19% + var(--a)); top: calc(0px + var(--b));">4</div>
+        <div class="box contactor" style="width: 1%; height: 140px; left: calc(22% + var(--a)); top: calc(-25px + var(--b));"></div>
+        <div class="box contactor" style="width: 2.5%; height: 90px; left: calc(23.5% + var(--a)); top: calc(0px + var(--b));">5</div>
+        <div class="box contactor" style="width: 2.5%; height: 90px; left: calc(26.5% + var(--a)); top: calc(0px + var(--b));">6</div>
+        <div class="box contactor" style="width: 1%; height: 140px; left: calc(29.5% + var(--a)); top: calc(-25px + var(--b));"></div>
+        <div class="box contactor" style="width: 2.5%; height: 90px; left: calc(31% + var(--a)); top: calc(0px + var(--b));">7</div>
+        <div class="box contactor" style="width: 2.5%; height: 90px; left: calc(34% + var(--a)); top: calc(0px + var(--b));">8</div>
+        <div class="box contactor" style="width: 2.5%; height: 90px; left: calc(37% + var(--a)); top: calc(0px + var(--b));">9</div>
+        <div class="box contactor" style="width: 1%; height: 140px; left: calc(40% + var(--a)); top: calc(-25px + var(--b));"></div>
+        <div class="box contactor" style="width: 2.5%; height: 90px; left: calc(41.5% + var(--a)); top: calc(0px + var(--b));">10</div>
+        <div class="box contactor" style="width: 2.5%; height: 90px; left: calc(44.5% + var(--a)); top: calc(0px + var(--b));">11</div>
+        <div class="box contactor" style="width: 2.5%; height: 90px; left: calc(47.5% + var(--a)); top: calc(0px + var(--b));">12</div>
+        <div class="box contactor" style="width: 1%; height: 140px; left: calc(50.5% + var(--a)); top: calc(-25px + var(--b));"></div>
+        <div class="box contactor" style="width: 2.5%; height: 90px; left: calc(52% + var(--a)); top: calc(0px + var(--b));">13</div>
+        <div class="box contactor" style="width: 2.5%; height: 90px; left: calc(55% + var(--a)); top: calc(0px + var(--b));">14</div>
+        <div class="box contactor" style="width: 2.5%; height: 90px; left: calc(58% + var(--a)); top: calc(0px + var(--b));">15</div>
+        <div class="box contactor" style="width: 2.5%; height: 90px; left: calc(61% + var(--a)); top: calc(0px + var(--b));">16</div>
+        <div class="box contactor" style="width: 1%; height: 140px; left: calc(64% + var(--a)); top: calc(-25px + var(--b));"></div>
+        <div style="width: 18%; height: 150px; left: calc(65.5% + var(--a)); top: calc(-30px + var(--b)); position: absolute; z-index: 100;">
+        <iframe id="timerFrame" src="components/timer.html" style="width: 100%; height: 100%; border: none;" scrolling="no"></iframe>
+    </div>
+    </div>
+
+    <div class="rail-group" id="group-l1">
+        <div class="label-id white-text" style="top: 1%; left: 85%;">L1</div> 
+        <div class="box l1" style="width: 32%; height: 1%; top: 1.3%; left: 75%;"></div>
+        <div class="box l1" style="width: 1.5%; height: 22.6%; top: 1.3%; left: 75%;"></div>
+        <div class="box l1" style="width: 6.6%; height: 1%; top: 23%; left: 70%;"></div>
+        <div class="box l1" style="width: 1.5%; height: 18%; top: 5%; left: 70%;"></div>
+        <div class="box l1" style="width: 11%; height: 1%; top: 5%; left: 59%;"></div>
+        <div class="box l1" style="width: 1.5%; height: 4%; top: 5%; left: 59%;"></div>
+        <div class="box l1" style="width: 1.5%; height: 4%; top: 18%; left: 57%;"></div>
+        <div class="box l1" style="width: 1.5%; height: 5%; top: 18%; left: 62%;"></div>
+        <div class="box l1" style="width: 18.5%; height: 1%; top: 21.5%; left: 40%;"></div>
+        <div class="box l1" style="width: 20.5%; height: 1%; top: 23%; left: 43%;"></div>
+        <div class="box l1" style="width: 1.5%; height: 19.5%; top: 3%; left: 40%;"></div>
+        <div class="box l1" style="width: 1.5%; height: 22%; top: 1%; left: 43%;"></div>
+        <div class="box l1" style="width: 25%; height: 1%; top: 1%; left: 18.5%;"></div>
+        <div class="box l1" style="width: 29%; height: 1%; top: 3%; left: 11%;"></div>
+        <div class="box l1" style="width: 1.5%; height: 7%; top: 1%; left: 18.5%;"></div>
+        <div class="box l1" style="width: 1.5%; height: 5%; top: 3%; left: 11%;"></div>
+        <div class="box l1" style="width: 1.5%; height: 20%; top: 19.9%; left: 11%;"></div>
+        <div class="box l1" style="width: 1.5%; height: 13.5%; top: 19.9%; left: 18%;"></div>
+        <div class="box l1" style="width: 24%; height: 1%; top: 33%; left: 18%;"></div>
+        <div class="box l1" style="width: 1.5%; height: 2%; top:33%; left: 41.5%;"></div>
+        <div class="box l1" style="width: 1.5%; height: 4%; top:54.5%; left: 41.5%;background-color: #312d75 !important;"></div>
+        <div class="box l1" style="width: 38%; height: 1%; top: 57.8%; left: 43%; transform: rotate(45deg); transform-origin: left top;background-color: #312d75 !important;"></div>
+        <div class="box l1" style="width: 75%; height: 1%; top: 72.6%; left: 68.5%;background-color: #312d75 !important;"></div>
+        <div class="box l1" style="width: 1.5%; height: 4%; top:50%; left: 11%;"></div>
+        <div class="box l1" style="width: 17.5%; height: 1%; top:54%; left: -5%;"></div>
+        <div class="box l1" style="width: 1.5%; height: 21%; top:89%; left: 86%;"></div>
+        <div class="box l1" style="width: 21%; height: 1%; top:89%; left: 86%;"></div>
+        <div class="box l1" style="width: 2%; height: 88.8%; top: 1.3%; left: 105%;"></div>
+        <div class="box l1" style="width: 2%; height: 20%; top: 54%; left: -7%;"></div>
+        <div class="box l1" style="width: 17.5%; height: 1%; top:73%; left: -5%;"></div>
+        <div class="box l1" style="width: 1.5%; height: 5%; top:73%; left: 12%;"></div>
+    </div>
+
+    <div class="rail-group" id="group-l2">
+        <div class="label-id white-text" style="top: 1.8%; left: 85%;">L2</div> 
+        <div class="box l2" style="width: 30%; height: 1%; top: 2.5%; left: 79%;"></div>
+        <div class="box l2" style="width: 1.5%; height: 22.5%; top: 2.5%; left: 79%;"></div>
+        <div class="box l2" style="width: 44.5%; height: 1%; top: 25%; left: 36%;"></div>
+        <div class="box l2" style="width: 1.5%; height: 19.5%; top: 6%; left: 36%;"></div>
+        <div class="box l2" style="width: 10.5%; height: 1%; top: 6%; left: 26%;"></div>
+        <div class="box l2" style="width: 1.5%; height: 2%; top: 6%; left: 26%;"></div>
+        <div class="box l2" style="width: 1.5%; height: 11%; top: 20%; left: 26%;"></div>
+        <div class="box l2" style="width: 23%; height: 1%; top: 31%; left: 26%;"></div>
+        <div class="box l2" style="width: 1.5%; height: 4%; top: 31%; left: 48.5%;"></div>
+        <div class="box l2" style="width: 1.5%; height: 4%; top: 54.5%; left: 48.5%;background-color: #345038 !important;"></div>
+        <div class="box l2" style="width: 35%; height: 1%; top: 57.8%; left: 50%; transform: rotate(45deg); transform-origin: left top;background-color: #345038 !important;"></div>
+        <div class="box l2" style="width: 70%; height: 1%; top: 71.4%; left: 73.3%;background-color: #345038 !important;"></div>
+        <div class="box l2" style="width: 1.5%; height: 18%; top:92%; left: 89%;"></div>
+        <div class="box l2" style="width: 21%; height: 1%; top:91%; left: 89%;"></div>
+        <div class="box l2" style="width: 2%; height: 89.5%; top:2.5%; left: 108%;"></div>
+    </div>
+
+    <div class="rail-group" id="group-l3">
+        <div class="label-id dark-text" style="top: 2.5%; left: 90%;">L3</div> 
+        <div class="box l3" style="width: 29.5%; height: 1%; top: 4%; left: 83%;"></div>
+        <div class="box l3" style="width: 1.5%; height: 23%; top: 4%; left: 83%;"></div>
+        <div class="box l3" style="width: 45%; height: 1%; top: 26%; left: 38%;"></div>
+        <div class="box l3" style="width: 1.5%; height: 21.5%; top: 5%; left: 38%;"></div>
+        <div class="box l3" style="width: 6.7%; height: 1%; top: 5%; left: 32%;"></div>
+        <div class="box l3" style="width: 1.5%; height: 3%; top: 5%; left: 32%;"></div>
+        <div class="box l3" style="width: 1.5%; height: 10%; top: 20%; left: 32%;"></div>
+        <div class="box l3" style="width: 25%; height: 1%; top: 29.5%; left: 32%;"></div>
+        <div class="box l3" style="width: 1.5%; height: 5.5%; top: 29.5%; left: 55.5%;"></div>
+        <div class="box l3" style="width: 1.5%; height: 2%; top: 54.5%; left: 55.5%;background-color: #626833 !important;"></div>
+        <div class="box l3" style="width: 22%; height: 1%; top: 56%; left: 55.5%;background-color: #626833 !important;"></div>
+        <div class="box l3" style="width: 1.5%; height: 15%; top: 56%; left: 77%;background-color: #626833 !important;"></div>
+        <div class="box l3" style="width: 65%; height: 1%; top: 70%; left: 78.5%; background-color: #626833 !important;"></div>
+        <div class="box l3" style="width: 1.5%; height: 17%; top:93%; left: 92%;"></div>
+        <div class="box l3" style="width: 19%; height: 1%; top:93%; left: 92%;"></div>
+        <div class="box l3" style="width: 2%; height: 90%; top:4%; left: 111%;"></div>
+    </div>
+
+    <div class="rail-group" id="rail-5-shelf" style="top: 55%; left: 0; width: 100%;">
+        <div class="din-rail" style="top: 45px;width: 10%; height: 15%; top:1%; left: 73%"></div>
+        <div class="box transducer" style="width: 25%; height: 8%; top: 5%; left: 65%;">
+            <span style="position: absolute; top: 5px;">Transducer</span>
+            <div class="inner-spec-box" style="width: 80%; height: 40%; bottom: 10%;">
+                <span style="font-size: 0.6rem; color: rgba(255, 255, 255, 0.7);">4-20mA</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================ -->
+    <!-- L4 WIRING INJECTION POINT                   -->
+    <!-- The line4.html content will be loaded here  -->
+    <!-- ============================================ -->
+    <div id="l4-injection-point" class="l4-injection-point"></div>
+
+    <div style="top: 93%; left: 38%; width: 40%; height: 50px; position: absolute; z-index: 10;">
+        <iframe src="ground.html" style="width: 100%; height: 100%; border: none; background: transparent;" scrolling="no"></iframe>
+    </div>
+
+    <div id="mainSwitch" class="box switch-box" style="width: 20%; height: 12%; top: 7.5%; left: 72%; cursor: pointer; user-select: none; z-index: 100;">
+        <div id="powerIndicator" class="indicator"></div>
+        Switch
+    </div>
+
+    <div class="box" style="width: 12%; height: 10%; top: 107%; left: 55%; background: #333; border: 2px solid #555; z-index: 100;">
+        <div id="genPilotLight" class="pilot-light"></div>
+        <span style="font-size: 0.5rem; color: #ccc; margin-top: 4px;">GEN RUNNING</span>
+    </div>
+
+    <div class="external-device" style="bottom: 185px; left: 130%; width: 180px; height: 180px; position: absolute; z-index: 20;">
+        <iframe id="fanFrame" src="components/fan.html" style="width: 100%; height: 100%; border: none; background: transparent;" scrolling="no"></iframe>
+        <div style="position: absolute; bottom: -40px; left: 50%; transform: translateX(-50%); width: 120px; height: 40px;">
+            <iframe id="rpmFrame" src="components/rpm.html" style="width: 100%; height: 100%; border: none; background: transparent;" scrolling="no"></iframe>
+        </div>
+    </div>
+
+    <div class="box earthing-terminal" style="top: 107%; left: 115%; width: 15%; height: 40px;">
+    <div class="ground-strip"></div>EARTHING</div>
+    <div class="box earthing-terminal" style="top: 0%; left: -25%; width: 15%; height: 40px;">
+    <div class="ground-strip"></div>EARTHING</div>
+
+    <div class="external-device" style="top: 50%; left: -140px; width: 110px; height: 110px; position: absolute; z-index: 20;">
+        <iframe id="ampFrame" src="components/amp.html" style="width: 100%; height: 100%; border: none; background: transparent;" scrolling="no"></iframe>
+    </div>
+
+    <div class="external-device" style="bottom: -20%; left: 70%; width: 200px; height: 140px; position: absolute; z-index: 20;">
+        <iframe id="genFrame" src="components/generator.html" style="width: 100%; height: 100%; border: none; background: transparent;" scrolling="no"></iframe>
+    </div>
+
+    <div style="top: 35%; left: -27%; width: 100px; height: 120px; position: absolute; z-index: 500;">
+        <iframe id="estopFrame" src="components/estop.html" style="width: 100%; height: 100%; border: none; background: transparent;" scrolling="no"></iframe>
+    </div>
+
+    <div class="box" style="width: 8%; height: 8%; top: 25%; left: -15%; background: #222; border: 2px solid #555; z-index: 100;">
+    <div id="estopLight" class="pilot-light-red"></div>
+    <span style="font-size: 0.5rem; color: #ccc; margin-top: 4px; text-align: center;">E-STOP ACTIVE</span>
+</div>
+
+<div id="resetBtn" class="box reset-button" style="width: 8%; height: 8%; top: 25%; left: -30%; cursor: pointer; z-index: 100;">
+    <div class="inner-button-blue"></div>
+    <span style="font-size: 0.5rem; color: #fff; margin-top: 4px;">RESET</span>
+</div>
+
+<div class="box" style="width: 8%; height: 8%; top: 25%; left: -40%; background: #222; border: 2px solid #555; z-index: 100;">
+    <div id="runLight" class="pilot-light-green"></div>
+    <span style="font-size: 0.5rem; color: #ccc; margin-top: 4px; text-align: center;">ON</span>
+</div>
+
+    <svg class="svg-overlay"><use href="#panel-wiring" /></svg>
+</div>
+
+<script src="script.js"></script>
+
+<!-- ============================================ -->
+<!-- L4 MODULE LOADER                            -->
+<!-- Loads line4.html and injects it dynamically -->
+<!-- ============================================ -->
+<script>
+(function() {
+    async function loadL4Module() {
+        try {
+            const response = await fetch('line4.html');
+            const html = await response.text();
+            
+            // Parse the HTML
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, 'text/html');
+            
+            // Get the container content
+            const container = doc.querySelector('.l4-wiring-container');
+            
+            if (container) {
+                // Get the injection point
+                const injectionPoint = document.getElementById('l4-injection-point');
+                
+                // Move all child nodes from container to injection point
+                while (container.firstChild) {
+                    injectionPoint.appendChild(container.firstChild);
+                }
+                
+                console.log('✓ L4 wiring module loaded successfully');
+            } else {
+                console.error('Could not find .l4-wiring-container in line4.html');
+            }
+        } catch (error) {
+            console.error('Failed to load L4 module:', error);
+        }
+    }
+    
+    // Load when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', loadL4Module);
+    } else {
+        loadL4Module();
+    }
+})();
+</script>
+
+</body>
+</html>

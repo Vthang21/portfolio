@@ -1,0 +1,199 @@
+:root {
+    --panel-w: 500px;
+    --panel-h: 900px;
+    --color-cb: #6a6a6a;
+    --color-contactor: #2c3e50;
+    --color-psu: #b0b0b0;
+    --color-timer: #d35400;
+    --color-switch: #1a1a1a;
+}
+
+body { 
+    background: #222; 
+    display: flex; 
+    justify-content: center; 
+    padding: 100px 20px; 
+    margin: 0;
+}
+
+/* --- Panel Enclosure --- */
+.panel { 
+    position: relative; 
+    width: var(--panel-w); 
+    height: var(--panel-h); 
+    background: #b0b0b0; 
+    border: 12px solid #555; 
+    border-radius: 4px;
+    overflow: visible; 
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.2), 0 20px 50px rgba(0,0,0,0.6);
+    z-index: 1;
+}
+
+/* --- Rail & Components --- */
+.din-rail { 
+    position: absolute; 
+    width: 94%; 
+    height: 3%; 
+    background: linear-gradient(to bottom, #bdc3c7 0%, #95a5a6 50%, #bdc3c7 100%);
+    left: 3%; 
+    border: 1px solid #7f8c8d; 
+    border-radius: 2px;
+    z-index: 3; 
+}
+
+.box, .switch-box { 
+    position: absolute; 
+    color: #fff; 
+    border: 1px solid #333; 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    font-family: 'Segoe UI', Arial, sans-serif; 
+    font-size: 0.7rem; 
+    font-weight: bold; 
+    border-radius: 2px;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2); 
+    pointer-events: auto; 
+    z-index: 11;
+}
+
+.cb { background: var(--color-cb); color: #333; border-top: 8px solid #333; }
+.contactor { background: var(--color-contactor); }
+.psu { background: var(--color-psu); border-right: 4px solid #7f8c8d; }
+.timer { background: var(--color-timer); }
+
+/* --- Wires (L1-L4) --- */
+.rail-group { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+#group-l1, #group-l2, #group-l3, #group-l4, .svg-overlay { z-index: 10 !important; }
+
+.box.l1 { background-color: #de1010 !important; border: none; } /* Red */
+.box.l2 { background-color: #1958f9 !important; border: none; } /* Blue */
+.box.l3 { background-color: #ffffff !important; color: #000 !important; border: none; } /* White */
+.box.l4 { background-color: #000000 !important; border: none; } /* Black */
+
+/* --- Interactive Switch & Pilot Lights --- */
+.switch-box { background: var(--color-switch); cursor: pointer; transition: transform 0.1s; }
+.switch-box:active { transform: scale(0.95); }
+
+.indicator { 
+    width: 20px; height: 20px; border-radius: 50%; border: 2px solid #333; 
+    background: #444; margin-bottom: 5px; transition: all 0.3s ease;
+}
+
+/* Red E-Stop Pilot Light */
+.pilot-light-red {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #400 0%, #200 100%);
+    border: 2px solid #111;
+    transition: all 0.2s;
+}
+
+.pilot-light-red.active {
+    background: radial-gradient(circle, #f00 20%, #800 100%);
+    box-shadow: 0 0 15px #f00, inset 0 0 5px #fff;
+}
+
+/* Blue Reset Button Styling */
+.reset-button {
+    background: #333;
+    border: 2px solid #555;
+    cursor: pointer;
+}
+
+.inner-button-blue {
+    width: 20px;
+    height: 20px;
+    background: linear-gradient(135deg, #0055ff, #002288);
+    border-radius: 3px;
+    border: 1px solid #001133;
+    box-shadow: 0 3px 0 #001133;
+    margin-bottom: 4px;
+}
+
+.reset-button:active .inner-button-blue {
+    transform: translateY(2px);
+    box-shadow: 0 1px 0 #001133;
+}
+
+/* Generic Pilot Light (for Gen Running) */
+.pilot-light {
+    width: 18px; height: 18px; border-radius: 50%;
+    background: #300; border: 2px solid #222;
+}
+
+.gen-on {
+    background: #f00 !important;
+    box-shadow: 0 0 15px #f00, inset 0 0 5px white !important;
+}
+
+/* --- Feedback Animations --- */
+@keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    50% { transform: translateX(4px); }
+    75% { transform: translateX(-4px); }
+    100% { transform: translateX(0); }
+}
+
+/* Screw Head Detail */
+.screw-philips {
+    position: absolute; width: 12px; height: 12px; border-radius: 50%; border: 1px solid #444; z-index: 12;
+    background: linear-gradient(90deg, transparent 45%, #222 45%, #222 55%, transparent 55%),
+                linear-gradient(0deg, transparent 45%, #222 45%, #222 55%, transparent 55%), #999;
+}
+
+.svg-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 150; }
+
+/* Transducer specific styling */
+.transducer { 
+    background-color: #27ae60 !important; /* Industrial Green */
+    border: 2px solid #1e8449;
+}
+
+.inner-spec-box { 
+    position: absolute; 
+    border: 1px solid rgba(255,255,255,0.2); 
+    background: #1a1a1a; 
+    border-radius: 2px; 
+    z-index: 100; 
+    display: flex; 
+    align-items: center; 
+    justify-content: center; 
+}
+
+/* Earthing Terminal Styling */
+.earthing-terminal {
+    background: linear-gradient(135deg, #2ecc71 45%, #f1c40f 45%, #f1c40f 55%, #2ecc71 55%);
+    background-size: 20px 20px; /* Creates the striped safety pattern */
+    color: #000 !important;
+    border: 2px solid #1e8449;
+    font-size: 0.6rem;
+    text-shadow: 0px 0px 2px white;
+}
+
+.ground-strip {
+    width: 80%;
+    height: 4px;
+    background: #7f8c8d;
+    margin-bottom: 4px;
+    border-radius: 2px;
+}
+
+/* The Green Pilot Light Base */
+.pilot-light-green {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #004400 0%, #002200 100%);
+    border: 2px solid #111;
+    transition: all 0.3s ease;
+}
+
+/* The Glowing "ON" State */
+.pilot-light-green.active-green {
+    background: radial-gradient(circle, #00ff00 20%, #008800 100%);
+    box-shadow: 0 0 15px #00ff00, inset 0 0 5px #ffffff;
+}

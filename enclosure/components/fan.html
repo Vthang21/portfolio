@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="fan.css">
+    <style>
+        body { 
+            margin: 0; background: transparent; overflow: hidden; 
+            display: flex; align-items: center; justify-content: center; height: 100vh; 
+        }
+        /* We remove the infinite CSS animation here and handle it in JS */
+        .fan-blades {
+            transform: rotate(0deg);
+        }
+    </style>
+</head>
+<body>
+
+    <div id="fan-unit" class="fan-housing">
+        <div id="blades" class="fan-blades"></div>
+        <div style="position: absolute; width: 24px; height: 24px; background: #222; border-radius: 50%; border: 2px solid #444; z-index: 11;"></div>
+    </div>
+
+    <script>
+        const blades = document.getElementById('blades');
+        let currentRpm = 0;
+        let targetRpm = 0;
+        let rotation = 0;
+
+        window.addEventListener('message', (event) => {
+            if (event.data === 'POWER_ON') targetRpm = 1450;
+            else if (event.data === 'POWER_OFF') targetRpm = 0;
+        });
+
+        function animate() {
+            // 1. Sync RPM physics (Same logic as your RPM readout)
+            if (currentRpm < targetRpm) currentRpm += 15;
+            if (currentRpm > targetRpm) currentRpm -= 5; // Slower friction stop
+            
+            if (Math.abs(currentRpm - targetRpm) < 5) currentRpm = targetRpm;
+
+            // 2. Calculate rotation based on RPM
+            // 1450 RPM is roughly 8.7 degrees per frame at 60fps
+            const speed = currentRpm / 166; 
+            rotation += speed;
+            
+            blades.style.transform = `rotate(${rotation}deg)`;
+
+            requestAnimationFrame(animate);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

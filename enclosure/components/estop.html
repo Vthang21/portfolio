@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        body { margin: 0; background: transparent; overflow: hidden; display: flex; align-items: center; justify-content: center; height: 100vh; }
+        .estop-station { display: flex; flex-direction: column; align-items: center; cursor: pointer; user-select: none; }
+        .estop-yellow-plate {
+            width: 70px; height: 70px; background: #ffd700; border: 3px solid #333;
+            border-radius: 50%; display: flex; justify-content: center; align-items: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.4); position: relative;
+        }
+        .estop-mushroom {
+            width: 45px; height: 45px; background: radial-gradient(circle at 30% 30%, #ff4d4d, #8b0000);
+            border: 2px solid #551a1a; border-radius: 50%; transition: all 0.1s;
+            box-shadow: 0 6px 0 #551a1a, 0 8px 10px rgba(0,0,0,0.4);
+        }
+        /* Your style logic for pressed state */
+        .pressed .estop-mushroom {
+            transform: translateY(4px);
+            box-shadow: 0 2px 0 #551a1a, 0 4px 5px rgba(0,0,0,0.4);
+            background: radial-gradient(circle at 30% 30%, #cc0000, #4d0000);
+        }
+        .estop-label { font-family: 'Arial Black', sans-serif; font-size: 8px; color: #000; margin-top: 5px; background: #ffd700; padding: 1px 4px; border: 1px solid #333; }
+    </style>
+</head>
+<body>
+    <div id="estopTrigger" class="estop-station">
+        <div class="estop-yellow-plate">
+            <div class="estop-mushroom"></div>
+        </div>
+        <span class="estop-label">EMERGENCY STOP</span>
+    </div>
+
+    <script>
+        let isActive = false;
+        const trigger = document.getElementById('estopTrigger');
+
+        trigger.addEventListener('click', () => {
+            isActive = !isActive;
+            if (isActive) {
+                trigger.classList.add('pressed');
+                window.parent.postMessage('ESTOP_ACTIVATED', '*');
+            } else {
+                trigger.classList.remove('pressed');
+                window.parent.postMessage('ESTOP_RESET', '*');
+            }
+        });
+    </script>
+</body>
+</html>

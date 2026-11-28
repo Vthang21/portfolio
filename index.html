@@ -278,6 +278,86 @@ footer{color:var(--mute);font-size:13px;text-align:center;padding:26px 0 40px}
         requestAnimationFrame(loop);
       })();
       </script>
+      <figure class="seg-anim" style="margin:12px 0 0">
+        <svg id="segSvg" viewBox="0 0 640 360" role="img" aria-label="Animated illustration of the road segmentation model training: on a bending road, the green predicted road starts blotchy and spills onto the grass, then tightens to the true road edges over the epochs while the road IoU climbs to 0.964; floodwater on the road is left out as not-road." style="width:100%;height:auto;display:block;border-radius:10px;background:#0f1722">
+          <defs>
+            <linearGradient id="sgSky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2b3f5c"/><stop offset="1" stop-color="#6d87a6"/></linearGradient>
+            <linearGradient id="sgGround" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3d5a35"/><stop offset="1" stop-color="#22351f"/></linearGradient>
+            <linearGradient id="sgWater" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#9fc3e4"/><stop offset="1" stop-color="#4f7fae"/></linearGradient>
+          </defs>
+          <rect width="640" height="140" fill="url(#sgSky)"/>
+          <rect y="140" width="640" height="220" fill="url(#sgGround)"/>
+          <g fill="#1d2c1a" opacity=".9"><path d="M0 140 Q60 105 120 140 Q170 115 220 140Z"/><path d="M420 140 Q480 110 540 140 Q590 120 640 140Z"/></g>
+          <path id="sgRoad" fill="#55585e"/>
+          <path id="sgLane" fill="none" stroke="#e9e3c9" stroke-width="3" stroke-dasharray="12 16" opacity=".6"/>
+          <ellipse id="sgFlood" fill="url(#sgWater)"/>
+          <path id="sgMask" fill="#2ecc71" fill-rule="evenodd" opacity=".5"/>
+          <path id="sgTruth" fill="none" stroke="#ffffff" stroke-width="1.6" stroke-dasharray="5 5" opacity=".8"/>
+          <text id="sgNot" font-family="Inter,sans-serif" font-size="12" font-weight="700" fill="#ff8a8c" text-anchor="middle" opacity="0">water = not road</text>
+          <g font-family="Inter,sans-serif" font-size="12" fill="#e8edf4">
+            <rect x="12" y="12" width="210" height="46" rx="8" fill="#0c1118" opacity=".72"/>
+            <rect x="21" y="22" width="12" height="10" fill="#2ecc71" opacity=".8"/><text x="40" y="31">model's road prediction</text>
+            <line x1="21" y1="46" x2="33" y2="46" stroke="#fff" stroke-dasharray="3 3"/><text x="40" y="50">true road edge (label)</text>
+            <rect x="452" y="12" width="176" height="64" rx="8" fill="#0c1118" opacity=".72"/>
+            <text id="sgEpoch" x="466" y="34" font-weight="600">Epoch 1</text>
+            <text x="466" y="62">Road IoU</text>
+            <text id="sgIou" x="614" y="62" text-anchor="end" font-size="20" font-weight="700" fill="#2ecc71">0.31</text>
+            <rect x="466" y="40" width="148" height="6" rx="3" fill="#243042"/>
+            <rect id="sgBar" x="466" y="40" width="10" height="6" rx="3" fill="#2ecc71"/>
+          </g>
+        </svg>
+        <figcaption class="cap">Illustration of the road model learning (not real footage). Early on its road guess is blotchy and spills onto the grass; as training goes on it hugs the true edges, follows the bends, and leaves floodwater out as not-road, so the car knows where it is safe to drive. The final 0.964 IoU is the measured result on a location never seen in training.</figcaption>
+      </figure>
+      <script>
+      (function(){
+        var svg=document.getElementById('segSvg'); if(!svg) return;
+        var $=function(id){return document.getElementById(id)};
+        var road=$('sgRoad'),lane=$('sgLane'),mask=$('sgMask'),truth=$('sgTruth'),fl=$('sgFlood'),not=$('sgNot'),
+            ep=$('sgEpoch'),iou=$('sgIou'),bar=$('sgBar');
+        var H=140,B=360,N=40,EPOCHS=100;
+        var ph=[];for(var i=0;i<6;i++)ph.push(Math.random()*6.28);
+        function geom(bend){ var L=[],R=[],C=[];
+          for(var i=0;i<=N;i++){ var f=i/N, y=H+(B-H)*Math.pow(f,1.35), g=(y-H)/(B-H),
+              cx=320+bend*Math.pow(1-g,2)*230, hw=6+250*g; L.push([cx-hw,y]);R.push([cx+hw,y]);C.push([cx,y,hw,g]); }
+          return {L:L,R:R,C:C}; }
+        function poly(pts){return 'M'+pts.map(function(p){return p[0].toFixed(1)+' '+p[1].toFixed(1)}).join('L')+'Z'}
+        function noise(i,side,t){return Math.sin(i*.55+ph[side]+t*.8)*.6+Math.sin(i*1.7+ph[side+2])*.4+Math.sin(i*.23+ph[side+4]-t*.5)*.5}
+        function draw(p,t){
+          var bend=Math.sin(t*.35)*1.0, G=geom(bend), C=G.C;
+          road.setAttribute('d',poly(G.L.concat(G.R.slice().reverse())));
+          truth.setAttribute('d',poly(G.L.concat(G.R.slice().reverse())));
+          lane.setAttribute('d','M'+C.map(function(c){return c[0].toFixed(1)+' '+c[1].toFixed(1)}).join('L'));
+          lane.setAttribute('stroke-dashoffset',(-t*60).toFixed(1));
+          // flood on the road
+          var fc=C[27], fx=fc[0]+fc[2]*.15, fy=fc[1], frx=fc[2]*.45, fry=4+16*fc[3];
+          fl.setAttribute('cx',fx.toFixed(1));fl.setAttribute('cy',fy.toFixed(1));fl.setAttribute('rx',frx.toFixed(1));fl.setAttribute('ry',fry.toFixed(1));
+          // prediction: error shrinks with training
+          var amp=Math.pow(1-p,1.6), Lm=[],Rm=[];
+          for(var i=0;i<=N;i++){ var c=C[i], s=c[2]*1.1*amp+2*(1-p)+1.5;
+            var shiftL=noise(i,0,t)*s, shiftR=noise(i,1,t)*s,
+                lagX=(1-p)*(-Math.sin(t*.35))*Math.pow(1-c[3],2)*140; // early model doesn't follow the bend
+            Lm.push([c[0]-c[2]+shiftL+lagX,c[1]]); Rm.push([c[0]+c[2]+shiftR+lagX,c[1]]); }
+          var d=poly(Lm.concat(Rm.reverse()));
+          var hole=Math.max(0,Math.min(1,(p-.45)/.3));
+          if(hole>0){ var hr=frx*hole, hy=fry*hole;
+            d+=' M'+(fx-hr).toFixed(1)+' '+fy.toFixed(1)+' a'+hr.toFixed(1)+' '+hy.toFixed(1)+' 0 1 0 '+(2*hr).toFixed(1)+' 0 a'+hr.toFixed(1)+' '+hy.toFixed(1)+' 0 1 0 '+(-2*hr).toFixed(1)+' 0Z'; }
+          // early blotches on the grass
+          if(p<.5){ var k=1-p/.5;
+            [[120,250,40],[540,300,55],[470,200,25]].forEach(function(b,j){ var r=b[2]*k*(0.8+0.2*Math.sin(t*2+j));
+              d+=' M'+(b[0]-r)+' '+b[1]+' a'+r+' '+(r*.5)+' 0 1 0 '+(2*r)+' 0 a'+r+' '+(r*.5)+' 0 1 0 '+(-2*r)+' 0Z'; }); }
+          mask.setAttribute('d',d);
+          not.setAttribute('x',fx.toFixed(1)); not.setAttribute('y',(fy-fry-6).toFixed(1)); not.setAttribute('opacity',hole.toFixed(2));
+          var e=Math.max(1,Math.round(p*EPOCHS)), v=0.31+(0.964-0.31)*(1-Math.pow(1-p,2.2));
+          ep.textContent='Epoch '+e+' / '+EPOCHS; iou.textContent=v.toFixed(3);
+          bar.setAttribute('width',(148*Math.max(.04,p)).toFixed(1));
+        }
+        var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if(reduce){ draw(1,2); return; }
+        var T=11000,t0=null;
+        function loop(now){ if(t0===null)t0=now; var ms=now-t0, c=(ms%T)/T, p=c<.75?c/.75:1; draw(p,ms/1000); requestAnimationFrame(loop); }
+        requestAnimationFrame(loop);
+      })();
+      </script>
     </div>
     <div>
       <div class="kicker">HONOURS PROJECT · QUT EGH490 · 2026 · SUPERVISOR: DR CONNOR MALONE</div>
